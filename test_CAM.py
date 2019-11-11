@@ -84,7 +84,6 @@ class AnimatingLandscape():
             finalconv_name = 'in5'
             
             P_m.eval()
-            print(P_m.eval())
 
             features_blobs = []
 
@@ -100,7 +99,7 @@ class AnimatingLandscape():
                 features_blobs.append(output.data.cpu().numpy())
 
             P_m._modules.get(finalconv_name).register_forward_hook(hook_feature)
-            
+                        
             params = list(P_m.parameters())
             weight_softmax = codebook_m
 
@@ -118,8 +117,21 @@ class AnimatingLandscape():
                     output_cam.append(cv2.resize(cam_img, size_upsample))
                 return output_cam
             
+            from torchvision import models, transforms
+
+            preprocess = transforms.Compose([
+              transforms.Resize((224,224)),
+              transforms.ToTensor(),
+              normalize
+            ])
+
+            img_tensor = preprocess(test_img)
+            img_variable = Variable(img_tensor.unsqueeze(0))
+            
+            logit = P_m(img_variable)
+
             # generate class activation mapping for the top1 prediction
-            CAMs = returnCAM(features_blobs[0], weight_softmax, [1])
+            CAMs = returnCAM(features_blobs, weight_softmax, [1])
 
             # render the CAM and output
             print('output CAM.jpg for the top1 prediction: %s'%classes[1])
