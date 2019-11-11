@@ -102,7 +102,7 @@ class AnimatingLandscape():
             P_m._modules.get(finalconv_name).register_forward_hook(hook_feature)
             
             params = list(P_m.parameters())
-            weight_softmax = np.squeeze(params[-2].data.numpy())
+            weight_softmax = codebook_m
 
             def returnCAM(feature_conv, weight_softmax, class_idx):
                 # generate the class activation maps upsample to 256x256
@@ -119,10 +119,10 @@ class AnimatingLandscape():
                 return output_cam
             
             # generate class activation mapping for the top1 prediction
-            CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
+            CAMs = returnCAM(features_blobs[0], weight_softmax, [1])
 
             # render the CAM and output
-            print('output CAM.jpg for the top1 prediction: %s'%classes[idx[0]])
+            print('output CAM.jpg for the top1 prediction: %s'%classes[1])
             height, width, _ = test_img.shape
             heatmap = cv2.applyColorMap(cv2.resize(CAMs[0],(width, height)), cv2.COLORMAP_JET)
             result = heatmap * 0.3 + test_img * 0.5
