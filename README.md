@@ -21,7 +21,7 @@ python test.py --gpu 0 -i ./inputs/your_image.png -o ./outputs
 ## References
 
 This repository contains mostly code of the following paper:
-
+```
 @article{endo2019animatinglandscape,
   title = {Animating Landscape: Self-Supervised Learning of Decoupled Motion and Appearance for Single-Image Video Synthesis},
   author = {Yuki Endo and Yoshihiro Kanamori and Shigeru Kuriyama},
@@ -31,3 +31,4 @@ This repository contains mostly code of the following paper:
   number = 6,
   pages = {175:1--175:19}
 }
+```
